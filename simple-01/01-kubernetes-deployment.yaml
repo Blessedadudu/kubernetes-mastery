@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: #Dictionary
+  name: simple-01-deployment
+spec: # Dictionary
+  replicas: 2
+  selector:
+    matchLabels:
+      app: simple-01
+  template:
+    metadata: # Dictionary
+      name: simple-01-pod
+      labels: # Dictionary
+        app: simple-01 # Key value pairs
+    spec:
+      containers: # List
+        - name: simple-01-container
+          image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeappdeployments
+  labels:
+    type: backend
+    app: nodeapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: backend
+      app: nodeapp
+  template:
+    metadata:
+      name: nodeapppod
+      labels:
+        type: backend
+        app: nodeapp
+    spec:
+      containers:
+        - name: nodecontainer
+          image: europe-west1-docker.pkg.dev/singular-agent-452813-n6/test/node-k8:latest
+          ports:
+            - containerPort: 80
