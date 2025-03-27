@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: todoapp
+  labels:
+    app: todoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todoapp
+  template:  
+    metadata:
+      labels: 
+        app: todoapp
+    spec:
+      initContainers:
+        - name: init-db
+          image: busybox:1.31
+          command: ['sh', '-c', 'echo -e "Checking for MySQL..."; while ! nc -z mysql 3306; do sleep 1; done; echo "MySQL is up!";']      
+      containers:
+        - name: todoapp
+          image: europe-west1-docker.pkg.dev/singular-agent-452813-n6/docker-node/node-k8:latest
+          ports: 
+            - containerPort: 8080           
+          env:
+            - name: DB_HOSTNAME
+              value: "mysql"            
+            - name: DB_PORT
+              value: "3306"            
+            - name: DB_NAME
+              value: "todos_db"            
+            - name: DB_USERNAME
+              value: "root"            
+            - name: DB_PASSWORD
+              value: "supersecret"
